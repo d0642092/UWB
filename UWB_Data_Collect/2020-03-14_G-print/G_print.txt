@@ -1,0 +1,4 @@
+wifi架高(和coordinate不同平面)較穩定
+
+狀況:
+anchor回傳回傳漏掉許多資料alive為個位數 -->基站An0011(coordinate)座標和閘道coordinate座標要一致
