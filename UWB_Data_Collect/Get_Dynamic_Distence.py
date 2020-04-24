@@ -3,6 +3,7 @@ import time
 import pandas
 import threading
 import queue
+import openpyxl
 
 
 codeStart = time.time()
@@ -125,6 +126,7 @@ class data(threading.Thread):
 
 # def TagRealDistence(Velocity):
 #     pass
+
 IMU = dataIMU("IMU")
 Data = data("Data")
 
