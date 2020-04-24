@@ -3,6 +3,9 @@ import time
 import pandas
 import threading
 import queue
+from openpyxl import load_workbook
+from openpyxl.styles import colors, Font, Fill, NamedStyle
+from openpyxl.styles import PatternFill, Border, Side, Alignment
 
 codeStart = time.time()
 Detail_Data = queue.Queue()
@@ -64,11 +67,21 @@ class data(threading.Thread):
                 continue
             try:
                 disData = Detail_Data.get()
-                dis.append({"An0011": {"Ranging": disData["An0011"]["Ranging"], "IMU": disData["An0011"]["IMU"], "Actual distance": Actual_distance11},
-                            "An0094": {"Ranging": disData["An0094"]["Ranging"], "IMU": disData["An0094"]["IMU"], "Actual_distance": Actual_distance94},
-                            "An0095": {"Ranging": disData["An0095"]["Ranging"], "IMU": disData["An0095"]["IMU"], "Actual_distance": Actual_distance95},
-                            "An0096": {"Ranging": disData["An0096"]["Ranging"], "IMU": disData["An0096"]["IMU"], "Actual distance": Actual_distance96},
-                            "An0099": {"Ranging": disData["An0099"]["Ranging"], "IMU": disData["An0099"]["IMU"], "Actual_distance": Actual_distance99}})
+                dis.append({"An0011_Ranging": disData["An0011"]["Ranging"],
+                            "An0011_IMU": disData["An0011"]["IMU"],
+                            "An0011_Actual_distance": Actual_distance11,
+                            "An0094_Ranging": disData["An0094"]["Ranging"],
+                            "An0094_IMU": disData["An0094"]["IMU"],
+                            "An0094_Actual_distance": Actual_distance94,
+                            "An0095_Ranging": disData["An0095"]["Ranging"],
+                            "An0095_IMU": disData["An0095"]["IMU"],
+                            "An0095_Actual_distance": Actual_distance95,
+                            "An0096_Ranging": disData["An0096"]["Ranging"],
+                            "An0096_IMU": disData["An0096"]["IMU"],
+                            "An0096_Actual_distance": Actual_distance96,
+                            "An0099_Ranging": disData["An0099"]["Ranging"],
+                            "An0099_IMU": disData["An0099"]["IMU"],
+                            "An0099_Actual_distance": Actual_distance99})
                 print("An0011", disData["An0011"]["Ranging"], "IMU", disData["An0011"]["IMU"], "TagV", disData["An0011"]["TagVelocity"], "Actual distance" ,  Actual_distance11)
                 print("An0094", disData["An0094"]["Ranging"], "IMU", disData["An0094"]["IMU"], "TagV", disData["An0094"]["TagVelocity"], "Actual distance",  Actual_distance94)
                 print("An0095", disData["An0095"]["Ranging"], "IMU", disData["An0095"]["IMU"], "TagV", disData["An0095"]["TagVelocity"], "Actual distance",  Actual_distance95)
@@ -79,6 +92,9 @@ class data(threading.Thread):
 
 
         df = pandas.DataFrame(dis)
+        firstrow = []
+        firstrow.insert(0, {'name': '', 'age': '', 'sex': ''})
+        pandas.concat([pandas.DataFrame(firstrow), df], ignore_index=True, sort=False)
         try:
             with pandas.ExcelWriter('G-print_3.xlsx', mode='a') as writer:
                 df.to_excel(writer, sheet_name='100x100_An96_124', encoding="utf_8")
