@@ -75,7 +75,7 @@ class writeData (threading.Thread):
         for i in range(2,17,3): # excel merge cells
             ws.merge_cells(start_row = 1,start_column = i ,end_row = 1 ,end_column = i+2 )
         
-        ws.append([""] + ["Ranging","IMU","Actual"]*5) # Excel title
+        ws.append(["Index"] + ["Ranging","IMU","Actual"]*5) # Excel title
         while DataQueue.qsize() > 0 or not catchDone: # if qsize < 0 & catchDone , it should be end
             if DataQueue.qsize() != 0 : # when queue have something
                 disData = DataQueue.get() # get catchData
