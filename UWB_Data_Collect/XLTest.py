@@ -29,27 +29,29 @@ class catchData (threading.Thread):
             try:
                 input = requests.get(url).json()
                 print(max)
-                output.append(max)
                 for i in AnchorName:
                     dis = json.loads(input[i])
                     output.append(dis["Ranging"])
                     output.append(dis["IMU"])
-                    #output.append("") # actualDis
+                    output.append("") # actualDis
                     
             except KeyError:
                 print("keyError")
                 pass
             except KeyboardInterrupt:
                 pass
-            print("output : ",output)
             if before != output:
+                print("output : ",output)
                 before = output.copy()
-                DataQueue.put(output)
+                DataQueue.put(output.copy())
                 ActualDis.put(time.time())
+                output.append(max)
                 max += 1
+                
             output.clear()
+            # output.append(max)
 
-            if max >= 3:
+            if max >= 200:
                 break
 
 
@@ -60,10 +62,12 @@ class writeData (threading.Thread):
         self.num = num
     
     def run(self):
+        beforeTime = time.time()
         try:
-            wb = load_workbook("Test.xlsx")
+            wb = load_workbook("DisAndTime.xlsx")
         except Exception :
             wb = Workbook()
+            print("New Excel")
         ws = wb.create_sheet("DynamicDis")
         ws.append(['',"An0011","","","An0094","","","An0095","","","An0096","","","An0099","",""])
         for i in range(2,17,3):
@@ -71,15 +75,15 @@ class writeData (threading.Thread):
         # ws.append(["An0011","","","An0094","","","An0095","","","An0096","","","An0099","",""])
         
         ws.append([""] + ["Ranging","IMU","Actual"]*5)
-        
         while DataQueue.qsize() > 0 or not catchDone:
             if DataQueue.qsize() != 0 :
                 disData = DataQueue.get()
                 actTime = ActualDis.get()
-                disData.append(actTime)
+                disData.append(actTime - beforeTime)
+                beforeTime = actTime
                 #acutalDisCal(actTime)
                 ws.append(disData)
-        wb.save('Test.xlsx')
+        wb.save('DisAndTime.xlsx')
 
 
                     
