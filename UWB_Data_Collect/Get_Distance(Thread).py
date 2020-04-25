@@ -87,16 +87,16 @@ class dataWork(threading.Thread):
             dis99.append(disData.get("An0099", 0))
 
         df = pandas.DataFrame(
-            {"An0011": dis11, "Real11": 162,
-             "An0094": dis94, "Real94": 121,
-             "An0095": dis95, "Real95": 216,
-             "An0096": dis96, "Real96": 124,
-             "An0099": dis99, "Real99": 217})
+            {"An0011": dis11, "Real11": 256,
+             "An0094": dis94, "Real94": 393,
+             "An0095": dis95, "Real95": 395,
+             "An0096": dis96, "Real96": 162,
+             "An0099": dis99, "Real99": 160})
         try:
-            with pandas.ExcelWriter('G-print_2.xlsx', mode='a') as writer:
+            with pandas.ExcelWriter('G-print_3.xlsx', mode='a') as writer:
                 df.to_excel(writer, sheet_name='100x100_An96_124', encoding="utf_8")
         except FileNotFoundError:
-            df.to_excel('G-print_2.xlsx', sheet_name='440x170_An96_274', encoding="utf_8")
+            df.to_excel('G-print_3.xlsx', sheet_name='4', encoding="utf_8")
 
 
 ask = dataAsk(1)
