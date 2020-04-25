@@ -21,39 +21,39 @@ class catchData (threading.Thread):
 
     
     def run(self):
-        max = 1
-        same = 1
-        output = []
-        before = []
-        AnchorName = ["An0011","An0094","An0095","An0096","An0099"]
+        max = 1 # count the data which has been catch
+        same = 1 # count how many same data has been drop
+        output = [] # output List
+        before = [] # last time output List
+        AnchorName = ["An0011","An0094","An0095","An0096","An0099"] # anchor Name
 
         while True:
-            try:
+            try: # try to request
                 #input = requests.get(url).json()
-                for i in AnchorName:
-                    dis = json.loads(input[i])
-                    output.append(dis["Ranging"])
-                    output.append(dis["IMU"])
-                    output.append("") # actualDis
-            except KeyError:
+                for i in AnchorName: # deal the input from croodinate
+                    dis = json.loads(input[i]) # deal json
+                    output.append(dis["Ranging"]) # get Ranging Data
+                    output.append(dis["IMU"]) # get IMU Data
+                    output.append("") # actualDis will be placed here
+            except KeyError: # if input lost some Data which make the keyError
                 print("keyError")
                 continue
-            except KeyboardInterrupt:
+            except KeyboardInterrupt: # I want to set the KBInterrupt, but it is invalid
                 break
-            if before != output:
-                before = output.copy()
-                output.insert(0,max)
-                print("output : ",output)
-                DataQueue.put(output.copy())
-                ActualDis.put(time.time())
-                max += 1
+            if before != output: # if output doesn't same as last time
+                before = output.copy() # update before
+                output.insert(0,max) # insert the Index for Excel
+                print("output : ",output) # show output which will be place into queue
+                DataQueue.put(output.copy()) # put(output.copy()) is important, if put(output) will put a pointer into queue
+                ActualDis.put(time.time()) # record time
+                max += 1 # count the amount of Data into queue
             else:
                 print("same")
                 same += 1
-                if same > 50:
+                if same > 50: # if to many same Data
                     break
-            output.clear()
-            if max > 3:
+            output.clear() # make output List empty
+            if max > 3: # set the number how many Data you want to catch
                 break
 
 
@@ -64,28 +64,27 @@ class writeData (threading.Thread):
         self.num = num
     
     def run(self):
-        beforeTime = time.time()
+        beforeTime = time.time() # start Time
         try:
-            wb = load_workbook("DisAndTime.xlsx")
+            wb = load_workbook("DisAndTime.xlsx") # read exist excel
         except Exception :
-            wb = Workbook()
+            wb = Workbook() # create new excel
             print("New Excel")
-        ws = wb.create_sheet("DynamicDis")
-        ws.append(['',"An0011","","","An0094","","","An0095","","","An0096","","","An0099","",""])
-        for i in range(2,17,3):
+        ws = wb.create_sheet("DynamicDis") # focus on / create sheet "DynamicDis"
+        ws.append(['',"An0011","","","An0094","","","An0095","","","An0096","","","An0099","",""]) # Excel title
+        for i in range(2,17,3): # excel merge cells
             ws.merge_cells(start_row = 1,start_column = i ,end_row = 1 ,end_column = i+2 )
-        # ws.append(["An0011","","","An0094","","","An0095","","","An0096","","","An0099","",""])
         
-        ws.append([""] + ["Ranging","IMU","Actual"]*5)
-        while DataQueue.qsize() > 0 or not catchDone:
-            if DataQueue.qsize() != 0 :
-                disData = DataQueue.get()
-                actTime = ActualDis.get()
-                disData.append(actTime - beforeTime)
-                beforeTime = actTime
-                #acutalDisCal(actTime)
-                ws.append(disData)
-        wb.save('DisAndTime.xlsx')
+        ws.append([""] + ["Ranging","IMU","Actual"]*5) # Excel title
+        while DataQueue.qsize() > 0 or not catchDone: # if qsize < 0 & catchDone , it should be end
+            if DataQueue.qsize() != 0 : # when queue have something
+                disData = DataQueue.get() # get catchData
+                actTime = ActualDis.get() # get catchTime
+                disData.append(actTime - beforeTime) # record Time gap
+                beforeTime = actTime # update BeforeTime
+                #acutalDisCal(actTime) # calculate Actual Range with Time gap  
+                ws.append(disData) # write into Excel
+        wb.save('DisAndTime.xlsx') # save Excel
 
 
                     
