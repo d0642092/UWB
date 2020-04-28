@@ -47,7 +47,7 @@ class catchData (threading.Thread):
                 DataQueue.put(output.copy()) # put(output.copy()) is important, if put(output) will put a pointer into queue
                 ActualDis.put(time.time()) # record time
                 max += 1 # count the amount of Data into queue
-            else:
+            else: # if you don't care how many same data, disable this else block.
                 print("same")
                 same += 1
                 if same > 50: # if to many same Data
