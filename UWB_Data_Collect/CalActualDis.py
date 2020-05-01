@@ -5,6 +5,7 @@ import math
 # speed is a float about m/s
 # dir is a list about eight direction. Ex. [1/0,1/0,1/0]
 # return the list which include distances between each anchor and car. Ex. [Anchor1WithCar,Anchor2WithCar,......]
+anchorPositions = {"An0011": [0,0], "An0094":[0,0] , "An0095":[0,0],"An0096":[0,0],"An0099":[0,0]}
 
 def calDis(timediff,car,anchors,speed,dir):
     move = speed * timediff
