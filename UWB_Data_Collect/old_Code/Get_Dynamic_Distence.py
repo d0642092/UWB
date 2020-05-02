@@ -88,7 +88,7 @@ if __name__ == '__main__':
     # avg_V = total_distance / car_runTime  # The average velocity
     AnchorName = ["An0011", "An0094", "An0095", "An0096", "An0099"]
 
-    # IMU = catchData("IMU", True)
+    # IMU = catchData("IMU", True)  # car 延遲兩秒 sleep(2)
     # Data = writerData(0)
     car = forward(True)
     commandIn = sendToSerial("sendIn")
@@ -112,6 +112,8 @@ if __name__ == '__main__':
         # 停止 thread
         car.flag = False
         # IMU.flag = False
+        while True:
+            pass
     except KeyboardInterrupt:
         # 意外發生可打斷
         car.flag = False

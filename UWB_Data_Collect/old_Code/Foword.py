@@ -26,13 +26,15 @@ class forward(threading.Thread):
         print('Wait for connect...')
         # start = time.time()
         # end = time.time()
+        # while self.flag:
         clientConnection, addr = serverOne.accept()
+
         while self.flag:
             # end = time.time()
             print('...connected from:', addr)
-            clientConnection.send(b'\xFA\x01\xAA\xFF\xFF\xFF\xFF\xFF\xFF\xFB\x0D\x0A')
             print(self.flag)
-
+            clientConnection.send(b'\xFA\x01\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFB\x0D\x0A')
+            time.sleep(1)
             # while True:
             #     data = clientConnection.recv(BUFFSIZE) #byte格式資料..>此資料來自'serialWrite.py'..>也許是確認用
             #     print(data.decode('utf-8')) #轉成string
@@ -40,6 +42,7 @@ class forward(threading.Thread):
         clientConnection.send(b'\xFA\x08\x00\x00\x00\x00\x00\x00\x00\xFB\x0D\x0A')
         clientConnection.close()
         serverOne.close()
+
 
 
 # def keyboard_on_press(key):

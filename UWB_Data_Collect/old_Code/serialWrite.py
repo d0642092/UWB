@@ -8,7 +8,7 @@ import threading
 import sys
 import traceback
 
-# serport = serial.Serial('COM5', 115200)
+serport = serial.Serial('COM5', 115200)
 
 HOST = '127.0.0.1'
 PORT = 55688  #'Foword.py'是你的server
@@ -40,10 +40,12 @@ class sendToSerial(threading.Thread):
         lastcommand = b''
         while True:
             command = clientOne.recv(BUFFSIZE)
-            # serport.write(command)
-            if command != lastcommand:
+
+            if command != b'':
+                serport.write(command)
                 print(command)
             lastcommand = command
             if command == b'\xFA\x08\x00\x00\x00\x00\x00\x00\x00\xFB\x0D\x0A':
+                serport.write(command)
                 clientOne.close()
                 break
