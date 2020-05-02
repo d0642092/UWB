@@ -8,7 +8,7 @@ import threading
 import sys
 import traceback
 
-serport = serial.Serial('COM5', 115200)
+# serport = serial.Serial('COM5', 115200)
 
 HOST = '127.0.0.1'
 PORT = 55688  #'Foword.py'是你的server
@@ -22,19 +22,28 @@ BUFFSIZE = 1024
 # socket.SOCK_STREAM: TCP (Default)
 
 class sendToSerial(threading.Thread):
-    def __init__(self):
+    def __init__(self, name):
         threading.Thread.__init__(self)
+        self.name = name
+
     def run(self):
         # create an AF_INET, STREAM socket (TCP)
         try:
             clientOne = socket(AF_INET, SOCK_STREAM)
+            clientOne.connect(ADDR)
         except Exception:
             print("Fail to Build")
             sys.exit()
         print('Socket Created')
 
         #-----------------------------------------------
+        lastcommand = b''
         while True:
             command = clientOne.recv(BUFFSIZE)
-            serport.write(command)
-            clientOne.close()
+            # serport.write(command)
+            if command != lastcommand:
+                print(command)
+            lastcommand = command
+            if command == b'\xFA\x08\x00\x00\x00\x00\x00\x00\x00\xFB\x0D\x0A':
+                clientOne.close()
+                break

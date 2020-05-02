@@ -4,40 +4,31 @@ import threading
 from A import *
 
 class control(threading.Thread):
-    def __init__(self, num):
+    def __init__(self, num, flag):
         threading.Thread.__init__(self)
         self.num = num
+        self.flag = flag
     def run(self):
-        try:
-            while True:
-                print(self.num)
-        except KeyboardInterrupt:
-            print(456)
-            exit()
-
-# def keyboard_on_press(key):
-#
-#
-#
-# def keyboard_on_release(key):
-#     print('{0} release'.format(key))
-#     if key == key.esc:
-#         # Stop listener
-#         return False
-#
-# def keytest():
-#     with keyboard.Listener(on_press=keyboard_on_press,
-#                       on_release=keyboard_on_release) as listener: #  press的時候, 執行method
-#         listener.join()
-# keyboardThread = threading.Thread(target=keytest)
+        while self.flag:
+            print(self.num)
+            pr(a["b"])
+            break
 
 if __name__ == '__main__':
-    C = control("control")
-    child = A("kid")
+    C = control("control", True)
+    child = A("kid", True)
 
     child.start()
     C.start()
 
 
-    C.join()
-    child.join()
+    try:
+        while True:
+            pass
+        # C.join()
+        # child.join()
+    except KeyboardInterrupt:
+        C.flag = False
+        child.flag = False
+
+        exit()
