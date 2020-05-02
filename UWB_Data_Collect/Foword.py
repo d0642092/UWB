@@ -26,17 +26,17 @@ class forward(threading.Thread):
         print('Wait for connect...')
         # start = time.time()
         # end = time.time()
+        clientConnection, addr = serverOne.accept()
         while self.flag:
             # end = time.time()
-            clientConnection, addr = serverOne.accept()
             print('...connected from:', addr)
             clientConnection.send(b'\xFA\x01\xAA\xFF\xFF\xFF\xFF\xFF\xFF\xFB\x0D\x0A')
-            clientConnection.close()
+            print(self.flag)
+
             # while True:
             #     data = clientConnection.recv(BUFFSIZE) #byte格式資料..>此資料來自'serialWrite.py'..>也許是確認用
             #     print(data.decode('utf-8')) #轉成string
             #     #...
-        clientConnection, addr = serverOne.accept()
         clientConnection.send(b'\xFA\x08\x00\x00\x00\x00\x00\x00\x00\xFB\x0D\x0A')
         clientConnection.close()
         serverOne.close()
