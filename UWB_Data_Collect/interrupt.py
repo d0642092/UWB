@@ -1,8 +1,13 @@
-numbers = []
-loop = True
+import threading
 
-try: 
-    # ===========SUBROUTINES==================
+class run(threading.Thread):
+    def __init__(self,num,flag):
+        threading.Thread.__init__(self)
+        self.num = num
+        self.flag = flag
+    def run(self):
+        while self.flag:
+            print(self.num)
 
     def help():
         print("To view the list type 'view'"
@@ -23,3 +28,14 @@ try:
 except KeyboardInterrupt:
     print("InterRupt")
     exit()
+
+if __name__ == "__main__":
+    R = run("Running",True)
+    R.start()
+    try:
+        while True:
+            pass
+    except KeyboardInterrupt:
+        R.flag = False
+        print("InterRupt")
+
