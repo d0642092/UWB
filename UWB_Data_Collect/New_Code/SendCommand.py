@@ -18,7 +18,7 @@ server = socket(AF_INET, SOCK_STREAM)
 server.bind(ADDR)
 server.listen(1)
 
-# while True:
+print("Wait the client connect...")
 connectRoad, addr = server.accept()
 while True:
     try:
@@ -27,6 +27,7 @@ while True:
             serport.write(clientMessage)
             print("Client Message is: ", clientMessage)
         if clientMessage == b'\xFA\x08\x00\x00\x00\x00\x00\x00\x00\xFB\x0D\x0A':
+            serport.write(clientMessage)
             returnMessage = "Already Stop"
             connectRoad.sendall(returnMessage.encode())
             break
@@ -36,10 +37,5 @@ while True:
         print("未找到 client")
         break
 
-    # try:
-    #     clientMessage = connectRoad.recv(BUFFSIZE)
-    #     flag = True
-    # except Exception:
-    #     flag = False
 connectRoad.close()  # 不關在接受的話會一直收到 b'' 但在裡面關client端無法重複傳送
 
