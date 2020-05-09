@@ -6,9 +6,10 @@ from pynput import keyboard
 import time
 
 class control(threading.Thread):
-    def __init__(self, num):
+    def __init__(self, num, flag):
         threading.Thread.__init__(self)
         self.num = num
+<<<<<<< HEAD
 
     @classmethod
     def print_run(cls):
@@ -51,10 +52,35 @@ class control(threading.Thread):
 if __name__ == '__main__':
     C = control("control")
     # child = A("kid")
+=======
+        self.flag = flag
+    def run(self):
+        while self.flag:
+            print(self.num)
+            pr(a["b"])
+            break
+
+if __name__ == '__main__':
+    C = control("control", True)
+    child = A("kid", True)
+>>>>>>> 20a69e0e8cf1e47bdd0bd83795adcc00b79884c6
 
     # child.start()
     C.start()
 
 
+<<<<<<< HEAD
     C.join()
     # child.join()
+=======
+    try:
+        while True:
+            pass
+        # C.join()
+        # child.join()
+    except KeyboardInterrupt:
+        C.flag = False
+        child.flag = False
+
+        exit()
+>>>>>>> 20a69e0e8cf1e47bdd0bd83795adcc00b79884c6
