@@ -39,7 +39,7 @@ class writerData(threading.Thread):
                     output.append(disData[i]["Ranging"])
                     output.append(disData[i]["IMU"])
                     # 算實際距離 (時間差, 平均速度, CalActual的變數(  , anchor 座標,  ) )
-                    output.append(calDis(arrive_time - beforeTime, self.avg_V, car_direction, anchorPositions[i], dire))
+                    output.append(calDis(arrive_time - beforeTime, self.avg_V, carPosition, anchorPositions[i], dire))
                 ws.append(output)  # 輸出資料
                 self.index += 1  # 當前index
                 print(output)
