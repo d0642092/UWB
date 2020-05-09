@@ -3,6 +3,7 @@
 '''
 from socket import *
 import threading
+import time
 
 class Forward(threading.Thread):
     def __init__(self, name, flag):
@@ -11,18 +12,19 @@ class Forward(threading.Thread):
         self.flag = flag
         # self.time = time
     def run(self):
-        HOST = '192.168.8.105'  # socket  server端的ip 可在內網
+        HOST = '127.0.0.1'  # socket  server端的ip 可在內網
         PORT = 55688  # 'SendCommand.py'是你的server端
         ADDR = (HOST, PORT)
         BUFFSIZE = 1024
-
+        i = 0
         client = socket(AF_INET, SOCK_STREAM)
         try:
             client.connect(ADDR)
+            client.sendall(b'\xFA\x01\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFB\x0D\x0A')
+            print("Server: ", client.recv(BUFFSIZE))
+            print("Waiting...")
             while self.flag:
-                client.sendall(b'\xFA\x01\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFB\x0D\x0A')
-                print("Server: ", client.recv(BUFFSIZE))
-
+                pass
             client.sendall(b'\xFA\x08\x00\x00\x00\x00\x00\x00\x00\xFB\x0D\x0A')
             print("Server: ", client.recv(BUFFSIZE))
             client.close()

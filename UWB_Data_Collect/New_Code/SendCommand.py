@@ -9,7 +9,7 @@ import serial
 
 serport = serial.Serial('COM5', 115200)
 
-HOST = '192.168.8.105'
+HOST = '127.0.0.1'
 PORT = 55688  #'ControllCar.py'是你的client
 ADDR = (HOST, PORT)
 BUFFSIZE = 1024
