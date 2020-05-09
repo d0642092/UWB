@@ -6,9 +6,9 @@ import math
 # speed is a float about m/s
 # dir is a list about eight direction. Ex. [1/0,1/0,1/0]
 # return the list which include distances between each anchor and car. Ex. [Anchor1WithCar,Anchor2WithCar,......]
-anchorPositions = {"An0011": [0, 0], "An0094": [0, 0], "An0095": [0, 0], "An0096": [0, 0], "An0099": [0, 0]}
-carPosition = [0, 0, 0]
-dire = [1,0, 0]
+anchorPositions = {"An0011": [0, 0, 0], "An0094": [0, 0, 0], "An0095": [0, 300, 0], "An0096": [300, 300, 0], "An0099": [300, 0, 0]}
+carPosition = [110, 80, 0]
+dire = [0, 0, 0]
 
 
 def calDis(timediff,speed,car,anchors,dir):
@@ -32,8 +32,8 @@ def calRange(car,anchor):
     if len(car) != len(anchor):
         raise IndexError("Wrong Length of parameter")
     sum = 0
-    for i,dimen in car:
-        sum += pow(abs(dimen - anchor[i]),2)
+    for i,dimen in enumerate(car):
+        sum += pow(abs(dimen - anchor[i]), 2)
     return math.sqrt(sum)
 
         
