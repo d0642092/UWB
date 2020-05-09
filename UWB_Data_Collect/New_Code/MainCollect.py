@@ -4,16 +4,16 @@ from UWB_Data_Collect.New_Code.CatchData import catchData
 from UWB_Data_Collect.New_Code.WriteData import writerData
 from UWB_Data_Collect.New_Code.ControllCar import Forward
 
-class ServerNotAlive(threading.Thread):
-    def __init__(self,flag):
-        threading.Thread.__init__(self)
-        self.flag = flag
-    def run(self):
-        while self.flag:
-            if not controlCar.flag:  # 會占用主程式所以另用一個thread 不能用~controlCar.flag
-                # dataCatch.flag = False  # 應該沒有意義到<有sleep>
-                print("server close")
-                self.flag = False
+# class ServerNotAlive(threading.Thread):
+#     def __init__(self,flag):
+#         threading.Thread.__init__(self)
+#         self.flag = flag
+#     def run(self):
+#         while self.flag:
+#             if not controlCar.flag:  # 會占用主程式所以另用一個thread 不能用~controlCar.flag
+#                 # dataCatch.flag = False  # 應該沒有意義到<有sleep>
+#                 print("server close")
+#                 self.flag = False
 
 
 if __name__ == "__main__":
@@ -23,12 +23,12 @@ if __name__ == "__main__":
     avg_V = total_distance / car_runTime  # The average velocity
 
     controlCar = Forward("ControlCar", True)
-    checkServer = ServerNotAlive(True)
+    # checkServer = ServerNotAlive(True)
     # dataCatch = catchData("CatchData", True)  # car 延遲兩秒 sleep(2)
     # dataWrite = writerData("WriteData", 1, True, avg_V)
 
     controlCar.start()
-    checkServer.start()
+    # checkServer.start()
 
     # time.sleep(2.2)
     # dataCatch.start()
@@ -39,24 +39,29 @@ if __name__ == "__main__":
     carEnd = time.time()
 
     try:
-        if checkServer.flag:
-            while carEnd - carStart < car_runTime:
-                # print(carEnd - carStart)
-                carEnd = time.time()
+        # if checkServer.flag:
+        #     while carEnd - carStart < car_runTime:
+        #         # print(carEnd - carStart)
+        #         carEnd = time.time()
 
+        while carEnd - carStart < car_runTime:
+            # print(carEnd - carStart)
+            carEnd = time.time()
         # 停止 thread
-        checkServer.flag = False
+        # checkServer.flag = False
         controlCar.flag = False
+        pass
+        # while maxs < 50:
+        #     continue
         # dataCatch.flag = False
-        # while True:
-        #     pass
     except KeyboardInterrupt:
+        # checkServer.flag = False
         controlCar.flag = False
         # dataCatch.flag = False
-        checkServer.flag = False
-    print("stasteart to join")
+
     controlCar.join()
-    print("start cs join")
-    checkServer.join()
+    # checkServer.join()
+    # dataCatch.join()
+    #
     # dataWrite.undone = False
     # dataWrite.join()
