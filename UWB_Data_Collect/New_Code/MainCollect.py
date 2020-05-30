@@ -18,25 +18,26 @@ from UWB_Data_Collect.New_Code.ControllCar import Forward
 
 if __name__ == "__main__":
 
-    car_runTime = 10  # How much time let the car run
-    total_distance = 100  # How long if the car run car_runTime second
-    avg_V = total_distance / car_runTime  # The average velocity
+    # car_runTime = 10  # How much time let the car run
+    # total_distance = 100  # How long if the car run car_runTime second
+    # avg_V = total_distance / car_runTime  # The average velocity
+    avg_V = 0;
 
-    controlCar = Forward("ControlCar", True)
+    # controlCar = Forward("ControlCar", True)
     # checkServer = ServerNotAlive(True)
-    # dataCatch = catchData("CatchData", True)  # car 延遲兩秒 sleep(2)
-    # dataWrite = writerData("WriteData", 1, True, avg_V)
+    dataCatch = catchData("CatchData", True)  # car 延遲兩秒 sleep(2)
+    dataWrite = writerData("WriteData", 1, True, avg_V)
 
-    controlCar.start()
+    # controlCar.start()
     # checkServer.start()
 
     # time.sleep(2.2)
-    # dataCatch.start()
-    # dataWrite.start()
+    dataCatch.start()
+    dataWrite.start()
 
 
-    carStart = time.time()
-    carEnd = time.time()
+    # carStart = time.time()
+    # carEnd = time.time()
 
     try:
         # if checkServer.flag:
@@ -44,24 +45,26 @@ if __name__ == "__main__":
         #         # print(carEnd - carStart)
         #         carEnd = time.time()
 
-        while carEnd - carStart < car_runTime:
-            # print(carEnd - carStart)
-            carEnd = time.time()
+        while True:
+            pass
+            # print()
+            # carEnd = time.time()
+        # controlCar.flag = False
         # 停止 thread
         # checkServer.flag = False
-        controlCar.flag = False
-        pass
+        # controlCar.flag = False
         # while maxs < 50:
         #     continue
-        # dataCatch.flag = False
+        dataCatch.flag = False
     except KeyboardInterrupt:
         # checkServer.flag = False
-        controlCar.flag = False
-        # dataCatch.flag = False
+        # controlCar.flag = False
+        dataCatch.flag = False
+    # print(carStart, carEnd)
+    # print(carEnd - carStart)
 
-    controlCar.join()
+    # controlCar.join()
     # checkServer.join()
     # dataCatch.join()
-    #
-    # dataWrite.undone = False
-    # dataWrite.join()
+    dataWrite.undone = False
+    dataWrite.join()

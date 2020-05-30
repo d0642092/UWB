@@ -8,6 +8,10 @@ from openpyxl import Workbook, load_workbook
 from UWB_Data_Collect.New_Code.CalActualDis import *
 from UWB_Data_Collect.New_Code.CatchData import AnchorName, Detail_Data, Catch_time
 
+anchorPositions = {"An0011": [0, 0, 0], "An0094": [0, 0, 0], "An0095": [0, 300, 0], "An0096": [300, 300, 0], "An0099": [300, 0, 0]}
+carPosition = [110, 80, 0]
+dire = [0, 0, 0]
+
 class writerData(threading.Thread):
     def __init__(self, name, index, undone, avg_V):
         threading.Thread.__init__(self)
