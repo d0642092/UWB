@@ -6,13 +6,13 @@ import numpy as np
 def get_cos(c,a,b):#短邊、長邊、anchor間距離
     tmp = math.pow(a,2) + math.pow(b,2) - math.pow(c,2)
     div = 2 * a * b
-    return round(tmp / div , 2)
+    return round(tmp / div , 2) # cos(c)
 
 def get_dis(c,a,b):
     return a * get_cos(c,a,b)
 
-def get_anchor_dis(x1,x2,y1,y2):
-    return round(math.sqrt(math.pow(x1-x2,2) + math.pow(y1-y2,2)),2)
+def get_anchor_dis(x_off,y_off):
+    return round(math.sqrt(math.pow(x_off,2) + math.pow(y_off,2)),2)
 
 x = [0,-75,75,-75,75]
 y = [0,-75,-75,75,75]
@@ -31,15 +31,15 @@ tar_y = []
 
 for i in range(3):
     for j in [i+1,i+2]:
-        third = i if dis[i] > dis[j] else j
+        third = i if dis[i] > dis[j] else j  # 取長邊
         print(third)
-        sec = j if third == i else i
+        sec = j if third == i else i # 取短邊
         print(sec)
-        x_off = x[third] - x[sec]
-        y_off = y[third] - y[sec]
+        x_off = x[third] - x[sec] # anchor間的 x offset
+        y_off = y[third] - y[sec] # anchor間的 y offset
         print(x_off)
         print(y_off)
-        anchor_dis = get_anchor_dis(x[third],x[sec],y[third],y[sec])
+        anchor_dis = get_anchor_dis(x_off,y_off) #拿到兩個anchor間的距離
         print(anchor_dis)
         cur_off = get_dis(dis[sec], dis[third] , anchor_dis)
         cur_off_x = round(cur_off * x_off / anchor_dis,2)
@@ -89,6 +89,8 @@ for i in range(len(tar_x)):
     tl.color("red")
     tl.stamp()
 tl.done()
+
+
 
 
 
