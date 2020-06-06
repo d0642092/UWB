@@ -1,8 +1,8 @@
 import time
 import threading  # https://dotblogs.com.tw/yc421206/2011/01/04/20575
-from UWB_Data_Collect.New_Code.CatchData import catchData
-from UWB_Data_Collect.New_Code.WriteData import writerData
-from UWB_Data_Collect.New_Code.ControllCar import Forward
+from CatchData import catchData
+from WriteData import writerData
+# from ControllCar import Forward
 
 # class ServerNotAlive(threading.Thread):
 #     def __init__(self,flag):
@@ -46,8 +46,7 @@ if __name__ == "__main__":
         #         carEnd = time.tim()e
 
         while True:
-            # pass
-            # print()
+            # print(carEnd - carStart)
             carEnd = time.time()
         # controlCar.flag = False
         # 停止 thread
@@ -66,6 +65,8 @@ if __name__ == "__main__":
     print(c)
 
     # controlCar.join()
+    # controlCar.join()
+    # print(carEnd - carStart)
     # checkServer.join()
     # dataCatch.join()
     dataWrite.undone = False

@@ -12,8 +12,8 @@ class Forward(threading.Thread):
         self.flag = flag
         # self.time = time
     def run(self):
-        HOST = '127.0.0.1'  # socket  server端的ip 可在內網
-        PORT = 55688  # 'SendCommand.py'是你的server端
+        HOST = '192.168.8.104'  # socket  server端的ip 可在內網
+        PORT = 5568  # 'SendCommand.py'是你的server端
         ADDR = (HOST, PORT)
         BUFFSIZE = 1024
         i = 0
