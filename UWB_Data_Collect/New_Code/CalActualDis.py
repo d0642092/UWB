@@ -9,13 +9,15 @@ import math
 
 
 
-def calDis(timediff,speed,car,anchors,dir):
+def calDis(timediff,speed,car,anchors,dir, flag):
     move = speed * timediff
-    for i,curDir in enumerate(dir):
-        if curDir == 1:
-            car[i] += move # calculate new car location
-
-    return calRange(car, anchors)
+    ans = calRange(car, anchors)
+    if flag:
+        for i,curDir in enumerate(dir):
+            car[i] += move * curDir # calculate new car location
+            # print(car , anchors);
+    return ans
+    # return calRange(car, anchors)
     # output = []
     # for anchor in anchors:
     #     try :
@@ -32,6 +34,7 @@ def calRange(car,anchor):
     sum = 0
     for i,dimen in enumerate(car):
         sum += pow(abs(dimen - anchor[i]), 2)
+    # print(math.sqrt(sum))
     return math.sqrt(sum)
 
         

@@ -21,9 +21,9 @@ if __name__ == "__main__":
     # car_runTime = 10  # How much time let the car run
     # total_distance = 100  # How long if the car run car_runTime second
     # avg_V = total_distance / car_runTime  # The average velocity
-    avg_V = 0;
-
-    # controlCar = Forward("ControlCar", True)
+    avg_V = 656/5.63
+    distance = 656
+    # controlCar =  Forward("ControlCar", True)
     # checkServer = ServerNotAlive(True)
     dataCatch = catchData("CatchData", True)  # car 延遲兩秒 sleep(2)
     dataWrite = writerData("WriteData", 1, True, avg_V)
@@ -36,19 +36,19 @@ if __name__ == "__main__":
     dataWrite.start()
 
 
-    # carStart = time.time()
-    # carEnd = time.time()
+    carStart = time.time()
+    carEnd = time.time()
 
     try:
         # if checkServer.flag:
         #     while carEnd - carStart < car_runTime:
         #         # print(carEnd - carStart)
-        #         carEnd = time.time()
+        #         carEnd = time.tim()e
 
         while True:
-            pass
+            # pass
             # print()
-            # carEnd = time.time()
+            carEnd = time.time()
         # controlCar.flag = False
         # 停止 thread
         # checkServer.flag = False
@@ -60,8 +60,10 @@ if __name__ == "__main__":
         # checkServer.flag = False
         # controlCar.flag = False
         dataCatch.flag = False
-    # print(carStart, carEnd)
-    # print(carEnd - carStart)
+    c = distance/(carEnd - carStart)
+    print(carStart, carEnd)
+    print(carEnd - carStart)
+    print(c)
 
     # controlCar.join()
     # checkServer.join()

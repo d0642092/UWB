@@ -19,6 +19,7 @@ class catchData(threading.Thread):
     def run(self):
         before = {}
         # maxs = 0
+        print("=================READY=================")
         while self.flag:
             try:
                 # if maxs == 50:
