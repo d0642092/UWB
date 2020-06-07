@@ -2,6 +2,7 @@ import threading
 import time
 
 #資料輸出
+import pandas
 from openpyxl import Workbook, load_workbook
 
 # 拿取自己寫的檔案
@@ -10,11 +11,23 @@ from UWB_Data_Collect.New_Code.CatchData import AnchorName, Detail_Data, Catch_t
 
 x = 289
 y = 115
-
-anchorPositions = {"An0011": [0, 0, 0], "An0094": [-x, -y, 0], "An0095": [x, y, 0], "An0096": [-x, y, 0], "An0099": [x, -y, 0]}
-carPosition = [-(x+176), -(y+137), -26.5]
+anchorPositions = {"An0011": [0, 0, 0],
+                   "An0094": [-x, -y, 0],
+                   "An0095": [x, y, 0],
+                    "An0096": [-x, y, 0],
+                   "An0099": [x, -y, 0]}
+carPosition = [-(x + 176), -(y + 137), -26.5]
 dir = [1, 0, 0]
 
+data = ["Ranging", "Actual", "IMU",
+        "PCnt", "AnCnt", "TagRecv", "TagFP",
+        "AnRecv", "AnFP", "LostRate",
+        "DataRate", "DataCount", "SlotTime",
+        "ResetTime", "TagVelocity", "SD"]
+date_set = {"An0011": {}, "An0094": {}, "An0095": {}, "An0096": {}, "An0099": {}}
+excel_sheetName = ["An0011", "An0094", "An0095", "An0096", "An0099", "分割頁"]
+fileName = "detail_text.xlsx"
+distanceSheetName = 'YuXiang_1'
 class writerData(threading.Thread):
     def __init__(self, name, index, undone, avg_V):
         threading.Thread.__init__(self)
@@ -23,47 +36,61 @@ class writerData(threading.Thread):
         self.undone = undone
         self.avg_V =avg_V
     def run(self):
-        beforeTime = time.time()  # 開始時間
+        for name in AnchorName:
+            for attr in data:
+                date_set[name][attr] = []
+
         try:
-            wb = load_workbook("outdoor_dynamic.xlsx")  # 嘗試開啟 excel
+            wb = load_workbook(fileName)  # 嘗試開啟 excel
         except FileNotFoundError:
             wb = Workbook()    # 建立新的 excel
-        ws = wb.create_sheet('YuXiang_1')  # 建立 sheet
         try:
+            ws = wb.create_sheet(distanceSheetName)  # 建立 sheet
             # excel 排版
             # =========================================================================================================
             ws.append(["", "An0011", "", "", "An0094", "", "", "An0095", "", "", "An0096", "", "", "An0099", "", ""])
             for i in range(2,17,3):
                 ws.merge_cells(start_row=1, start_column=i, end_row=1, end_column=i+2)
-            ws.append(["Index"] + ["Ranging", "IMU", "Actual"] * 5)
+            ws.append(["Index"] + ["Ranging", "Actual", "IMU"] * 5)
             # =========================================================================================================
+            output = []
+            beforeTime = time.time()  # 開始時間
+            while Detail_Data.qsize() > 0 or self.undone:
 
-            output = []  # 暫存輸出資料
-            while Detail_Data.qsize() > 0 or self.undone:  # 當佇列為空且 catchData 已做完則離開
                 if Detail_Data.qsize() != 0:
                     disData = Detail_Data.get()   # 拿取資料和時間
                     arrive_time = Catch_time.get()
-                    output.append(self.index)
-                    four_times = False
-                    for value,i in enumerate(AnchorName):   # 資料排版
-                        output.append(disData[i]["Ranging"])
-                        output.append(disData[i]["IMU"])
-
-                        # 算實際距離 (時間差, 平均速度, CalActual的變數(  , anchor 座標,  ) )
-                        if i != "An0011":
-                            output.append(calDis(arrive_time - beforeTime, self.avg_V, carPosition, anchorPositions[i], dir, four_times))
-                        else:
-                            output.append(0)
-                        if value == 3:
-                            four_times = True
+                    actual_dis = calDis(arrive_time - beforeTime, self.avg_V, carPosition, anchorPositions, dir)
+                    print(actual_dis)
                     beforeTime = arrive_time
+                    output.append(self.index)
+                    self.index += 1  # 當前index
+                    for index, name in enumerate(AnchorName):
+                        output.append(disData[name]["Ranging"])
+                        output.append(actual_dis[index])
+                        output.append(disData[name]["IMU"])
+                        for attr in data:
+                            if attr != "Actual":
+                                date_set[name][attr].append(disData[name][attr])
+                            else:
+                                date_set[name][attr].append(actual_dis[index])
+                        # print(date_set[name])
                     ws.append(output)  # 輸出資料
                     output.clear()
-                    self.index += 1  # 當前index
-                    # print(output)
-                wb.save('outdoor_dynamic.xlsx')  # 存檔
-                wb.close()
-        except Exception:
-            wb.save('outdoor_dynamic.xlsx')  # 存檔
+
+            print("Waiting for excel close")
+            wb.save(fileName)  # 存檔
             wb.close()
-            pass
+            for name in excel_sheetName:
+                if name == "分割頁":
+                    df = pandas.DataFrame()
+                else:
+                    df = pandas.DataFrame(date_set[name])
+                with pandas.ExcelWriter(fileName, mode='a') as writer:
+                    df.to_excel(writer, sheet_name=name, encoding="utf_8")
+
+            print("Done")
+        except Exception:
+            print("Error")
+            wb.save(fileName)  # 存檔
+            wb.close()

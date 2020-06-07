@@ -39,6 +39,6 @@ class catchData(threading.Thread):
                     Detail_Data.put(data)  # 放入資料
                     before = Ranging
                     # maxs += 1
-                    print(before)
+                    # print(before)
             except (KeyError, Exception):
                 continue

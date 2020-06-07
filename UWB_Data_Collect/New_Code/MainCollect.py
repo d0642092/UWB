@@ -1,7 +1,7 @@
 import time
 import threading  # https://dotblogs.com.tw/yc421206/2011/01/04/20575
-from CatchData import catchData
-from WriteData import writerData
+from UWB_Data_Collect.New_Code.CatchData import catchData
+from UWB_Data_Collect.New_Code.WriteData import writerData
 # from ControllCar import Forward
 
 # class ServerNotAlive(threading.Thread):
@@ -45,7 +45,7 @@ if __name__ == "__main__":
         #         # print(carEnd - carStart)
         #         carEnd = time.tim()e
 
-        while True:
+        while carEnd - carStart < 50:
             # print(carEnd - carStart)
             carEnd = time.time()
         # controlCar.flag = False
