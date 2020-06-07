@@ -30,15 +30,18 @@ class catchData(threading.Thread):
                 distance = distance.json()  # 解json格式
 
                 for value, anchor in enumerate(AnchorName):
-                    data[anchor] = eval((distance[anchor]))    # 將字串轉字典
-                    Ranging[anchor] = data[anchor]["Ranging"]  # 取判斷重複的值
-                    Ranging["IMU" + anchor] = data[anchor]["IMU"]
+                    try:
+                        data[anchor] = eval((distance[anchor]))    # 將字串轉字典
+                        Ranging[anchor] = data[anchor]["Ranging"]  # 取判斷重複的值
+                        Ranging["IMU" + anchor] = data[anchor]["IMU"]
+                    except KeyError:
+                        pass
 
                 if before != Ranging:      # 判斷重複
                     Catch_time.put(time.time())  # 拿取資料的時間
                     Detail_Data.put(data)  # 放入資料
                     before = Ranging
                     # maxs += 1
-                    # print(before)
+                    print(before)
             except (KeyError, Exception):
                 continue

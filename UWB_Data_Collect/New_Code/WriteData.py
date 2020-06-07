@@ -26,7 +26,7 @@ data = ["Ranging", "Actual", "IMU",
         "ResetTime", "TagVelocity", "SD"]
 date_set = {"An0011": {}, "An0094": {}, "An0095": {}, "An0096": {}, "An0099": {}}
 excel_sheetName = ["An0011", "An0094", "An0095", "An0096", "An0099", "分割頁"]
-fileName = "detail_text.xlsx"
+fileName = "detail_test.xlsx"
 distanceSheetName = 'YuXiang_1'
 class writerData(threading.Thread):
     def __init__(self, name, index, undone, avg_V):
@@ -61,20 +61,31 @@ class writerData(threading.Thread):
                     disData = Detail_Data.get()   # 拿取資料和時間
                     arrive_time = Catch_time.get()
                     actual_dis = calDis(arrive_time - beforeTime, self.avg_V, carPosition, anchorPositions, dir)
-                    print(actual_dis)
+                    # print(actual_dis)
                     beforeTime = arrive_time
                     output.append(self.index)
                     self.index += 1  # 當前index
                     for index, name in enumerate(AnchorName):
-                        output.append(disData[name]["Ranging"])
-                        output.append(actual_dis[index])
-                        output.append(disData[name]["IMU"])
+                        try:
+                            output.append(disData[name]["Ranging"])
+                            output.append(actual_dis[index])
+                            output.append(disData[name]["IMU"])
+                        except KeyError:
+                            pass
+
                         for attr in data:
-                            if attr != "Actual":
-                                date_set[name][attr].append(disData[name][attr])
-                            else:
-                                date_set[name][attr].append(actual_dis[index])
-                        # print(date_set[name])
+                            try:
+                                if attr != "Actual":
+                                    date_set[name][attr].append(disData[name][attr])
+                                else:
+                                    date_set[name][attr].append(actual_dis[index])
+                            # print(date_set[name])
+                            except KeyError:
+                                date_set[name][attr].append(0)  # dataframe 要相同長度
+                                print("Not find " + name + " " + attr)
+                                pass
+
+
                     ws.append(output)  # 輸出資料
                     output.clear()
 
@@ -90,7 +101,7 @@ class writerData(threading.Thread):
                     df.to_excel(writer, sheet_name=name, encoding="utf_8")
 
             print("Done")
-        except Exception:
+        except IOError:
             print("Error")
             wb.save(fileName)  # 存檔
             wb.close()
