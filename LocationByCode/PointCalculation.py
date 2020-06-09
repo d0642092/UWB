@@ -11,17 +11,17 @@ class pointCalculation():
     def set_dis(self,anchors_dis):
         self.anchors_dis = anchors_dis
 
-    def set_dis(self,anchors_x,anchors_y):
+    def set_XandY(self,anchors_x,anchors_y):
         self.anchors_x = anchors_x
         self.anchors_y = anchors_y
 
-    def get_cos(self,a,b,c):#短邊、長邊、anchor間距離
+    def get_cos(self,a,b,c):
         tmp = math.pow(a,2) + math.pow(b,2) - math.pow(c,2)
         div = 2 * a * b
         return round(tmp / div , 2) # cos(c)
 
     def get_dis(self,a,b,c):
-        return a * self.get_cos(a,b,c)
+        return round(a * self.get_cos(a,b,c),2)
 
     def get_anchor_dis(self,x_off,y_off):
         return round(math.sqrt(math.pow(x_off,2) + math.pow(y_off,2)),2)
@@ -35,8 +35,8 @@ class pointCalculation():
                     tmp.append(i)
                     tmp.append(j)
                     tmp.append(n)
-                    ans.append(tmp)
-                tmp.clear()
+                    ans.append(tmp.copy())
+                    tmp.clear()
         return ans
 
     def get_cal_array(self,anchor_groups):
@@ -58,12 +58,19 @@ class pointCalculation():
                 proportion = round(cur_off / dis_between_start_end , 2)
                 cur_off_x = x_off * proportion
                 cur_off_y = y_off * proportion
-                point_x = self.anchors_x[startAnchor] + cur_off_x
-                point_y = self.anchors_y[startAnchor] + cur_off_y
-                const = point_x * x_off + point_y * y_off
+                point_x = self.anchors_x[startAnchor] - cur_off_x
+                point_y = self.anchors_y[startAnchor] - cur_off_y
+                if x_off == 0:
+                    const = point_y
+                    y_off = 1
+                elif y_off == 0:
+                    const = point_x
+                    x_off = 1
+                else:
+                    const = point_x * x_off + point_y * y_off
                 paraTmp.append(x_off)
                 paraTmp.append(y_off)
-                paraArray.append(paraTmp)
+                paraArray.append(paraTmp.copy())
                 constList.append(const)
                 paraTmp.clear()
             A = np.mat(paraArray)
@@ -71,21 +78,17 @@ class pointCalculation():
             b = np.mat(constList).T
             constList.clear()
             r = np.linalg.solve(A,b)
-            print(r)
             ansPoint.append([r[0,0],r[1,0]])
         return ansPoint
     
     def draw_init(self):
         color = ["blue","yellow","green","purple",'black']
-        tl.speed(20)
+        tl.speed(5)
         for i in range(len(self.anchors_dis)):
             tl.color(color[i])
             tl.penup()
             tl.goto(self.anchors_x[i],self.anchors_y[i])
             tl.stamp()
-            tl.goto(self.anchors_x[i],self.anchors_y[i]-self.anchors_dis[i])
-            tl.pendown()
-            tl.circle(self.anchors_dis[i])
 
     def draw_move_line(self,points):
         tl.color("grey")
@@ -93,24 +96,54 @@ class pointCalculation():
         for point in points:
             tl.goto(point[0],point[1])
             tl.stamp()
+        tl.done()
+    
+    def get_point(self,points):
+        sum_X = 0
+        sum_Y = 0
+        for i in points:
+            sum_X += i[0]
+            sum_Y += i[1]
+        return [ sum_X / len(points) , sum_Y / len(points)]
+
 
     def get_close_point(self,points): # undone , I need to think
         mark = [0] * len(points)
-        color = list(range(len(points)))
-        offset = 30
+        #color = list(range(len(points)))
+        offset = 100
         for i in range(len(points)):
-            if mark[i] != 1:
-                x = points[i][0]
-                y = points[i][1]
-                mark[i] = 1
-            else: break
+            x = points[i][0]
+            y = points[i][1]
             for j in range(len(points)):
-                if i != j and mark[j] != 1:
+                if i == j:continue
+                else:
                     test_x = points[j][0]
                     test_y = points[j][1]
-                    if x + offset > test_x and i > x - offset and y + offset > test_y and test_y > y - offset:
-                        color[j] = color[i]
-                        mark[j] = 1
+                    if x + offset > test_x and test_x > x - offset and y + offset > test_y and test_y > y - offset:
+                        mark[j] += 1
+        maxIndex = 0
+        max = 0
+        for i in range(len(mark)):
+            if mark[i] > max:
+                max = mark[i]
+                maxIndex = i
+        x = points[maxIndex][0]
+        y = points[maxIndex][1]
+        max_X = points[maxIndex][0]
+        max_Y = points[maxIndex][1]
+        for j in range(len(points)):
+                if maxIndex == j:continue
+                else:
+                    test_x = points[j][0]
+                    test_y = points[j][1]
+                    if x + offset > test_x and test_x > x - offset and y + offset > test_y and test_y > y - offset:
+                        max_X += points[j][0]
+                        max_Y += points[j][1]
+        if mark[maxIndex] != 0:
+            raise ValueError("Bad Points",points)
+        mark[maxIndex] += 1
+        return [max_X / mark[maxIndex]  , max_Y / mark[maxIndex]]
+                        
                         
 
 

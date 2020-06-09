@@ -14,14 +14,17 @@ def get_dis(c,a,b):
 def get_anchor_dis(x_off,y_off):
     return round(math.sqrt(math.pow(x_off,2) + math.pow(y_off,2)),2)
 
-x = [0,-75,75,-75,75]
-y = [0,-75,-75,75,75]
+# x = [0,-75,75,-75,75]
+# y = [0,-75,-75,75,75]
 #dis = [162,90,189,120,232]#anchor
 #dis = [138,80,174,128,200]#real
 #dis = [153,99,100,177,190]#anchor
 #dis = [116,92,92,178,175]#real
 #dis = [174,102,245,88,234]
-dis = [133,105,222,100,222]
+#dis = [133,105,222,100,222]
+x = [-242,242,242,-242]
+y = [110,110,-110,-110]
+dis = [358, 624, 530, 142]
 
 con = []
 tmp_offList = []
@@ -29,7 +32,7 @@ arr_offList = []
 tar_x = []
 tar_y = []
 
-for i in range(3):
+for i in range(2):
     for j in [i+1,i+2]:
         third = i if dis[i] > dis[j] else j  # 取長邊
         print(third)
