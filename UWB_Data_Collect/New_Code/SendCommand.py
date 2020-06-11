@@ -7,6 +7,7 @@
 from socket import *
 import serial
 
+<<<<<<< HEAD
 serport = serial.Serial('COM3', 115200)
 
 
@@ -16,6 +17,11 @@ PORT = 55688  #'Foword.py'是你的server
 # HOST = '127.0.0.1'
 # PORT = 55688  #'ControllCar.py'是你的client
 
+=======
+serport = serial.Serial('COM5', 115200)
+HOST = '127.0.0.1'
+PORT = 55688  #'ControllCar.py'是你的client
+>>>>>>> 6409191193d2941ba24ea308b9a3839bce8f8a4a
 ADDR = (HOST, PORT)
 BUFFSIZE = 1024
 

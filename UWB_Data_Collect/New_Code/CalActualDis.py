@@ -6,25 +6,20 @@ import math
 # speed is a float about m/s
 # dir is a list about eight direction. Ex. [1/0,1/0,1/0]
 # return the list which include distances between each anchor and car. Ex. [Anchor1WithCar,Anchor2WithCar,......]
-anchorPositions = {"An0011": [0, 0, 0], "An0094": [0, 0, 0], "An0095": [0, 300, 0], "An0096": [300, 300, 0], "An0099": [300, 0, 0]}
-carPosition = [110, 80, 0]
-dire = [0, 0, 0]
+
 
 
 def calDis(timediff,speed,car,anchors,dir):
     move = speed * timediff
-    for i,curDir in enumerate(dir):
-        if curDir == 1:
-            car[i] += move # calculate new car location
-
-    return calRange(car, anchors)
-    # output = []
-    # for anchor in anchors:
-    #     try :
-    #         output.append(calRange(car,anchor))
-    #     except IndexError as InE:
-    #         print(InE)
-    # return output
+    output = []
+    for anchor in anchors.values():
+        try :
+            output.append(calRange(car,anchor))
+        except IndexError as InE:
+            print(InE)
+    for i, curDir in enumerate(dir):
+        car[i] += move * curDir # calculate new car location
+    return output
 
 # both of parameter are list about location[X,Y,Z].
 # return the Distance between car and anchor
