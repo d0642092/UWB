@@ -18,8 +18,9 @@ if __name__ == "__main__":
     sheetMaxCol = 16
     sheetMinCol = 5 # for real data
     sheetName = "abc"
-    filePath = "./LocationByCode./Test.xlsx"
-    
+    # filePath = "./LocationByCode./Test.xlsx"
+    filePath = "./Test.xlsx"
+
     wb = load_workbook(filename = filePath,read_only = True)
     ws = wb.get_sheet_by_name(sheetName)
     tmp = []

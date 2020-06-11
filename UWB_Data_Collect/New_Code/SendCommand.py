@@ -7,9 +7,21 @@
 from socket import *
 import serial
 
+<<<<<<< HEAD
+serport = serial.Serial('COM3', 115200)
+
+
+HOST = '192.168.8.105'
+PORT = 55688  #'Foword.py'是你的server
+
+# HOST = '127.0.0.1'
+# PORT = 55688  #'ControllCar.py'是你的client
+
+=======
 serport = serial.Serial('COM5', 115200)
 HOST = '127.0.0.1'
 PORT = 55688  #'ControllCar.py'是你的client
+>>>>>>> 6409191193d2941ba24ea308b9a3839bce8f8a4a
 ADDR = (HOST, PORT)
 BUFFSIZE = 1024
 
@@ -22,7 +34,7 @@ connectRoad, addr = server.accept()
 while True:
     try:
         clientMessage = connectRoad.recv(BUFFSIZE)
-        if clientMessage != b'':
+        if clientMessage == b'\xFA\x01\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFB\x0D\x0A':
             serport.write(clientMessage)
             print("Client Message is: ", clientMessage)
         if clientMessage == b'\xFA\x08\x00\x00\x00\x00\x00\x00\x00\xFB\x0D\x0A':
