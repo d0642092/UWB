@@ -16,7 +16,7 @@ if __name__ == "__main__":
     sheetMaxRow = 22
     sheetMinRow = 3
     sheetMaxCol = 16
-    sheetMinCol = 7 # for real data
+    sheetMinCol = 5 # for real data
     sheetName = "abc"
     filePath = "./LocationByCode./Test.xlsx"
     
@@ -39,7 +39,7 @@ if __name__ == "__main__":
         #print(anchorGroups)
         points = pc.get_cal_array(anchorGroups)
         try :
-            finalPoints.append(pc.get_point(points))
+            finalPoints.append(pc.get_close_point(points))
         except ValueError as e:
             print(repr(e))
     # ---------------------------   LocateByCode   ------------------------- 

@@ -110,7 +110,7 @@ class pointCalculation():
     def get_close_point(self,points): # undone , I need to think
         mark = [0] * len(points)
         #color = list(range(len(points)))
-        offset = 100
+        offset = 30
         for i in range(len(points)):
             x = points[i][0]
             y = points[i][1]
@@ -122,10 +122,10 @@ class pointCalculation():
                     if x + offset > test_x and test_x > x - offset and y + offset > test_y and test_y > y - offset:
                         mark[j] += 1
         maxIndex = 0
-        max = 0
+        biggest = 0
         for i in range(len(mark)):
-            if mark[i] > max:
-                max = mark[i]
+            if mark[i] > biggest:
+                biggest = mark[i]
                 maxIndex = i
         x = points[maxIndex][0]
         y = points[maxIndex][1]
@@ -139,7 +139,13 @@ class pointCalculation():
                     if x + offset > test_x and test_x > x - offset and y + offset > test_y and test_y > y - offset:
                         max_X += points[j][0]
                         max_Y += points[j][1]
-        if mark[maxIndex] != 0:
+        if mark[maxIndex] == 0:
+            # max_X = 0
+            # max_Y = 0
+            # for i in range(len(points)):
+            #     max_X += points[i][0]
+            #     max_Y += points[i][1]
+            # return [ max_X / len(points) , max_Y / len(points) ]
             raise ValueError("Bad Points",points)
         mark[maxIndex] += 1
         return [max_X / mark[maxIndex]  , max_Y / mark[maxIndex]]
