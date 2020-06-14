@@ -17,7 +17,7 @@ if __name__ == "__main__":
     sheetMinRow = 3
     sheetMaxCol = 16
     sheetMinCol = 5 # for real data
-    sheetName = "abc"
+    sheetName = "YuXiang_4"
     # filePath = "./LocationByCode./Test.xlsx"
     filePath = "./Test.xlsx"
 
@@ -28,7 +28,11 @@ if __name__ == "__main__":
         tmp.clear()
         for col in range(sheetMinCol,sheetMaxCol + 1,3):
             cell = ws.cell(row,col).value
+            if cell == None:
+                break
             tmp.append(int(cell))
+        if cell == None:
+            break
         anchor_Dis.append(tmp.copy())
     wb.close()
     # ---------------------------   read Excel   -------------------------
@@ -60,6 +64,4 @@ if __name__ == "__main__":
         tl.goto(point[0],point[1])
         tl.stamp()
     tl.mainloop()
-    
-    
     # ---------------------------   Draw   -------------------------  
