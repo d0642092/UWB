@@ -81,23 +81,6 @@ class pointCalculation():
             ansPoint.append([r[0,0],r[1,0]])
         return ansPoint
     
-    def draw_init(self):
-        color = ["blue","yellow","green","purple",'black']
-        tl.speed(5)
-        for i in range(len(self.anchors_dis)):
-            tl.color(color[i])
-            tl.penup()
-            tl.goto(self.anchors_x[i],self.anchors_y[i])
-            tl.stamp()
-
-    def draw_move_line(self,points):
-        tl.color("grey")
-        tl.penup()
-        for point in points:
-            tl.goto(point[0],point[1])
-            tl.stamp()
-        tl.done()
-    
     def get_point(self,points):
         sum_X = 0
         sum_Y = 0
