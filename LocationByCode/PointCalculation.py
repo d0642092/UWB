@@ -89,21 +89,17 @@ class pointCalculation():
             sum_Y += i[1]
         return [ sum_X / len(points) , sum_Y / len(points)]
 
-
     def get_close_point(self,points): # undone , I need to think
         mark = [0] * len(points)
-        #color = list(range(len(points)))
         offset = 30
         for i in range(len(points)):
             x = points[i][0]
             y = points[i][1]
             for j in range(len(points)):
-                if i == j:continue
-                else:
-                    test_x = points[j][0]
-                    test_y = points[j][1]
-                    if x + offset > test_x and test_x > x - offset and y + offset > test_y and test_y > y - offset:
-                        mark[j] += 1
+                test_x = points[j][0]
+                test_y = points[j][1]
+                if x + offset > test_x and test_x > x - offset and y + offset > test_y and test_y > y - offset:
+                    mark[j] += 1
         maxIndex = 0
         biggest = 0
         for i in range(len(mark)):
@@ -115,13 +111,11 @@ class pointCalculation():
         max_X = points[maxIndex][0]
         max_Y = points[maxIndex][1]
         for j in range(len(points)):
-                if maxIndex == j:continue
-                else:
-                    test_x = points[j][0]
-                    test_y = points[j][1]
-                    if x + offset > test_x and test_x > x - offset and y + offset > test_y and test_y > y - offset:
-                        max_X += points[j][0]
-                        max_Y += points[j][1]
+            test_x = points[j][0]
+            test_y = points[j][1]
+            if x + offset > test_x and test_x > x - offset and y + offset > test_y and test_y > y - offset:
+                max_X += points[j][0]
+                max_Y += points[j][1]
         if mark[maxIndex] == 0:
             # max_X = 0
             # max_Y = 0
