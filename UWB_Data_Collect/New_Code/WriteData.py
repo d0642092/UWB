@@ -9,17 +9,15 @@ from openpyxl import Workbook, load_workbook
 from UWB_Data_Collect.New_Code.CalActualDis import *
 from UWB_Data_Collect.New_Code.CatchData import AnchorName, Detail_Data, Catch_time
 
-# x = 305
-# y = 248
-x = 10
-y = 10
+x = 305
+y = 248
+
 anchorPositions = {"An0011": [0, 0, 0],
                    "An0094": [x, y, 0],
                    "An0095": [x, -y, 0],
                     "An0096": [-x, -y, 0],
                    "An0099": [-x, y, 0]}
-carPosition = [x+20, y, 0]
-# carPosition = [(x-270), -(y + 244), 0]
+carPosition = [(x-270), -(y + 244), 0]
 dir = [0, 1, 0]
 
 data = ["Ranging", "Actual", "IMU",
