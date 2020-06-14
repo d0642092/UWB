@@ -9,25 +9,29 @@ from openpyxl import Workbook, load_workbook
 from UWB_Data_Collect.New_Code.CalActualDis import *
 from UWB_Data_Collect.New_Code.CatchData import AnchorName, Detail_Data, Catch_time
 
-x = 289
-y = 115
+x = 305
+y = 248
+
 anchorPositions = {"An0011": [0, 0, 0],
-                   "An0094": [-x, -y, 0],
-                   "An0095": [x, y, 0],
-                    "An0096": [-x, y, 0],
-                   "An0099": [x, -y, 0]}
-carPosition = [-(x + 176), -(y + 137), -26.5]
-dir = [1, 0, 0]
+                   "An0094": [x, y, 0],
+                   "An0095": [x, -y, 0],
+                    "An0096": [-x, -y, 0],
+                   "An0099": [-x, y, 0]}
+carPosition = [(x-270), -(y + 244), 0]
+dir = [0, 1, 0]
 
 data = ["Ranging", "Actual", "IMU",
         "PCnt", "AnCnt", "TagRecv", "TagFP",
         "AnRecv", "AnFP", "LostRate",
         "DataRate", "DataCount", "SlotTime",
         "ResetTime", "TagVelocity", "SD"]
+
 date_set = {"An0011": {}, "An0094": {}, "An0095": {}, "An0096": {}, "An0099": {}}
 excel_sheetName = ["An0011", "An0094", "An0095", "An0096", "An0099", "分割頁"]
-fileName = "detail_test.xlsx"
-distanceSheetName = 'YuXiang_1'
+fileName = "TEST.xlsx"
+distanceSheetName = 'test_1'
+
+
 class writerData(threading.Thread):
     def __init__(self, name, index, undone, avg_V):
         threading.Thread.__init__(self)
@@ -51,7 +55,7 @@ class writerData(threading.Thread):
             ws.append(["", "An0011", "", "", "An0094", "", "", "An0095", "", "", "An0096", "", "", "An0099", "", ""])
             for i in range(2,17,3):
                 ws.merge_cells(start_row=1, start_column=i, end_row=1, end_column=i+2)
-            ws.append(["Index"] + ["Ranging", "Actual", "IMU"] * 5)
+            ws.append(["Index"] + ["Ranging", "Actual", "IMU"] * 5 + ["Timediff"])
             # =========================================================================================================
             output = []
             beforeTime = time.time()  # 開始時間
@@ -60,8 +64,9 @@ class writerData(threading.Thread):
                 if Detail_Data.qsize() != 0:
                     disData = Detail_Data.get()   # 拿取資料和時間
                     arrive_time = Catch_time.get()
-                    actual_dis = calDis(arrive_time - beforeTime, self.avg_V, carPosition, anchorPositions, dir)
-                    # print(actual_dis)
+                    tmpTime = arrive_time - beforeTime
+                    actual_dis = calDis(tmpTime, self.avg_V, carPosition, anchorPositions, dir)
+                    print(tmpTime)
                     beforeTime = arrive_time
                     output.append(self.index)
                     self.index += 1  # 當前index
@@ -85,7 +90,7 @@ class writerData(threading.Thread):
                                 print("Not find " + name + " " + attr)
                                 pass
 
-
+                    output.append(tmpTime)
                     ws.append(output)  # 輸出資料
                     output.clear()
 
@@ -102,6 +107,6 @@ class writerData(threading.Thread):
 
             print("Done")
         except IOError:
-            print("Error")
+            print("Error excel close")
             wb.save(fileName)  # 存檔
             wb.close()

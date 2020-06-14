@@ -18,24 +18,19 @@ class catchData(threading.Thread):
 
     def run(self):
         before = {}
+        Ranging = {}
+        data = {}
         # maxs = 0
         print("=================READY=================")
         while self.flag:
             try:
-                # if maxs == 50:
-                #     break
-                Ranging = {}
-                data = {}
+
                 distance = requests.get("http://192.168.8.107/php/diagnosis.php?getrangingdiagnosis=4210000000001198&project_id=1")
                 distance = distance.json()  # 解json格式
-
                 for value, anchor in enumerate(AnchorName):
-                    try:
-                        data[anchor] = eval((distance[anchor]))    # 將字串轉字典
-                        Ranging[anchor] = data[anchor]["Ranging"]  # 取判斷重複的值
-                        Ranging["IMU" + anchor] = data[anchor]["IMU"]
-                    except KeyError:
-                        pass
+                    data[anchor] = eval((distance[anchor]))    # 將字串轉字典
+                    Ranging[anchor] = data[anchor]["Ranging"]  # 取判斷重複的值
+                    Ranging["IMU" + anchor] = data[anchor]["IMU"]
 
                 if before != Ranging:      # 判斷重複
                     Catch_time.put(time.time())  # 拿取資料的時間
@@ -44,4 +39,5 @@ class catchData(threading.Thread):
                     # maxs += 1
                     print(before)
             except (KeyError, Exception):
+                print("err")
                 continue
