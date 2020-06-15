@@ -28,7 +28,7 @@ data = ["Ranging", "Actual", "IMU",
 
 date_set = {"An0011": {}, "An0094": {}, "An0095": {}, "An0096": {}, "An0099": {}}
 excel_sheetName = ["An0011", "An0094", "An0095", "An0096", "An0099", "分割頁"]
-fileName = "../2020-06-15_東門停車場/outdoor_static_4_99.xlsx"
+fileName = "outdoor_static_4_99.xlsx"
 distanceSheetName = 'YuXiang'
 
 
