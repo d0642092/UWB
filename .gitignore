@@ -1,3 +1,5 @@
+# Project exclude paths
+/venv/
 .idea/
 LocationByCode/__pycache__
 LocationByCode/.vscode
