@@ -76,7 +76,7 @@ for i in range(2):
     tar_x.append(round(r[0,0],2))
     tar_y.append(round(r[1,0],2))
 
-color = ["blue","yellow","green","purple",'black']
+color = ["blue","orange","green","purple",'black']
 tl.speed(20)
 for i in range(len(dis)):
     tl.color(color[i])
