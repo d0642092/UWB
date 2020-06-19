@@ -29,6 +29,8 @@ class pointCalculation():
     def get_group(self,anchor_numbers):
         ans = []
         tmp = []
+        if anchor_numbers < 3:
+            raise ValueError
         for i in range(anchor_numbers):
             for j in range(i+1,anchor_numbers):
                 for n in range(j+1,anchor_numbers):

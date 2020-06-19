@@ -9,8 +9,8 @@ from openpyxl import Workbook, load_workbook
 from UWB_Data_Collect.New_Code.CalActualDis import *
 from UWB_Data_Collect.New_Code.CatchData import AnchorName, Detail_Data, Catch_time
 
-x = 305
-y = 248
+x = 305 #錯的
+y = 248 #錯的
 
 anchorPositions = {"An0011": [0, 0, 0],
                    "An0094": [x, y, 0],
