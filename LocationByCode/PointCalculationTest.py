@@ -55,7 +55,7 @@ class PCtest(unittest.TestCase):
             self.assertAlmostEqual(res[0][i],ans[i],delta=5)
 
     def test_get_cal_array2(self):
-        Dis = [223.606,100,100]
+        Dis = [223.6,100,100]
         self.PC.set_dis(Dis)
         res = self.PC.get_cal_array(self.PC.get_group(3))
         ans = [0,-100]
@@ -63,7 +63,7 @@ class PCtest(unittest.TestCase):
             self.assertAlmostEqual(res[0][i],ans[i],delta=5)
 
     def test_get_cal_array3(self):
-        Dis = [316.22,316.22,141.4213]
+        Dis = [316.22,316.22,141.42]
         self.PC.set_dis(Dis)
         res = self.PC.get_cal_array(self.PC.get_group(3))
         ans = [-200,0]
@@ -79,7 +79,7 @@ class PCtest(unittest.TestCase):
             self.assertAlmostEqual(res[0][i],ans[i],delta=5)
 
     def test_get_cal_array5(self):
-        Dis = [316.22,316.22,141.4213,141.4213]
+        Dis = [316.22,316.22,141.42,141.42]
         self.PC.set_dis(Dis)
         res = self.PC.get_cal_array(self.PC.get_group(4))
         ans = [[-200,0]] * 4

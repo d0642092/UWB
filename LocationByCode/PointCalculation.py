@@ -42,7 +42,7 @@ class pointCalculation():
         return ans
     
     def chech_Tri(self,a,b,c):
-        if a + b >= c-1 and b + c >= a-1 and a + c >= b-1:
+        if a + b >= c and b + c >= a and a + c >= b:
             return True
         return False
     
