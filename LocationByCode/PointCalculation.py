@@ -3,7 +3,7 @@ import numpy as np
 import turtle as tl
 
 class pointCalculation():
-    def __init__(self,anchors_x,anchors_y,anchors_dis):
+    def __init__(self,anchors_x = None,anchors_y = None,anchors_dis = None):
         self.anchors_x = anchors_x
         self.anchors_y = anchors_y
         self.anchors_dis = anchors_dis
@@ -40,6 +40,33 @@ class pointCalculation():
                     ans.append(tmp.copy())
                     tmp.clear()
         return ans
+    
+    def chech_Tri(self,a,b,c):
+        if a + b >= c-1 and b + c >= a-1 and a + c >= b-1:
+            return True
+        return False
+    
+    def fitTriangle(self,a,b,c):
+        outofRange = 30
+        if a + b < c:
+            off = c - a - b
+            if off > outofRange:
+                raise ValueError("offset is large,Bad Point",a,b,c)
+            c -= off / 2
+            b += off / 2
+        elif b + c < a:
+            off = a - b - c
+            if off > outofRange:
+                raise ValueError("offset is large,Bad Point",a,b,c)
+            b += off / 2
+            c += off / 2
+        elif a + c < b:
+            off = b - a - c
+            if off > outofRange:
+                raise ValueError("offset is large,Bad Point",a,b,c)
+            b -= off / 2
+            c += off / 2
+        return [a,b,c]
 
     def get_cal_array(self,anchor_groups):
         constList = []
@@ -56,6 +83,14 @@ class pointCalculation():
                 dis_between_start_end = self.get_anchor_dis(x_off,y_off)
                 dis_start = self.anchors_dis[startAnchor]
                 dis_end = self.anchors_dis[endAnchor]
+                if not self.chech_Tri(dis_between_start_end,dis_start,dis_end):
+                    try:
+                        newDis = self.fitTriangle(dis_between_start_end,dis_start,dis_end)
+                        dis_start = newDis[1]
+                        dis_end = newDis[2]
+                    except ValueError as e:
+                        print(repr(e))
+                        return None
                 cur_off = self.get_dis(dis_start,dis_between_start_end,dis_end)
                 proportion = round(cur_off / dis_between_start_end , 2)
                 cur_off_x = x_off * proportion
