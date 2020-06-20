@@ -39,6 +39,7 @@ class PCtest(unittest.TestCase):
 
     def test_get_cal_array(self):
         Dis = [70.7]*3
+        self.PC.set_dis(Dis)
         res = self.PC.get_cal_array(self.PC.get_group(3))
         ans = [0,0]
         for i in range(len(ans)):
@@ -76,10 +77,40 @@ class PCtest(unittest.TestCase):
         for i in range(len(ans)):
             self.assertAlmostEqual(res[0][i],ans[i],delta=2)
 
-    # def test_get_point(self):
-    #     
-    # def test_get_colse_point(self):
-    #     
+    def test_get_point(self):
+        x = 50
+        y = 50
+        points = [[x,y],[x,-y],[-x,-y],[-x,y]]
+        res = self.PC.get_point(points)
+        ans = [0,0]
+        for i in range(len(ans)):
+            self.assertAlmostEqual(res[i],ans[i],delta=0.1)
+
+    def test_get_colse_point1(self):
+        x = 10
+        y = 10
+        points = [[x,y],[x,-y],[-x,-y],[-x,y]]
+        res = self.PC.get_close_point(points)
+        ans = [0,0]
+        for i in range(len(ans)):
+            self.assertAlmostEqual(res[i],ans[i],delta=0.1)
+
+    def test_get_colse_point2(self):
+        x = 10
+        y = 10
+        points = [[x,y],[x,-y],[-x,-y],[-6*x,y]]
+        res = self.PC.get_close_point(points)
+        ans = [3.3,-3.3]
+        for i in range(len(ans)):
+            self.assertAlmostEqual(res[i],ans[i],delta=0.1)
+    
+    def test_get_colse_pointException(self):
+        with self.assertRaises(ValueError):
+            x = 20
+            y = 20
+            points = [[x,y],[x,-y],[-x,-y],[-2*x,y]]
+            self.PC.get_close_point(points)
+
 if __name__ == "__main__":
         unittest.main()  # py .\PointCalculationTest.py -v         -->      use -v to get more information
 

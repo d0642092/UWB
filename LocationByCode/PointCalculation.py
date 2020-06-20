@@ -98,36 +98,46 @@ class pointCalculation():
             x = points[i][0]
             y = points[i][1]
             for j in range(len(points)):
+                if i == j:
+                    mark[i] += 1
+                    continue
                 test_x = points[j][0]
                 test_y = points[j][1]
                 if x + offset > test_x and test_x > x - offset and y + offset > test_y and test_y > y - offset:
-                    mark[j] += 1
+                    mark[i] += 1
+
         maxIndex = 0
         biggest = 0
         for i in range(len(mark)):
             if mark[i] > biggest:
                 biggest = mark[i]
                 maxIndex = i
+        if mark[maxIndex] == 1:
+            raise ValueError("Bad Points",points)
+        sameFlag = 1
+        value = mark[0]
+        for i in range(len(mark)):
+            if mark[i] != value:
+                sameFlag = 0
+        if sameFlag:
+            sum_X = 0
+            sum_Y = 0
+            for i in range(len(points)):
+                sum_X += points[i][0]
+                sum_Y += points[i][1]
+            return [ sum_X / len(points) , sum_Y / len(points) ]
+
         x = points[maxIndex][0]
         y = points[maxIndex][1]
-        max_X = points[maxIndex][0]
-        max_Y = points[maxIndex][1]
+        sum_X = 0
+        sum_Y = 0
         for j in range(len(points)):
             test_x = points[j][0]
             test_y = points[j][1]
             if x + offset > test_x and test_x > x - offset and y + offset > test_y and test_y > y - offset:
-                max_X += points[j][0]
-                max_Y += points[j][1]
-        if mark[maxIndex] == 0:
-            # max_X = 0
-            # max_Y = 0
-            # for i in range(len(points)):
-            #     max_X += points[i][0]
-            #     max_Y += points[i][1]
-            # return [ max_X / len(points) , max_Y / len(points) ]
-            raise ValueError("Bad Points",points)
-        mark[maxIndex] += 1
-        return [max_X / mark[maxIndex]  , max_Y / mark[maxIndex]]
+                sum_X += points[j][0]
+                sum_Y += points[j][1]
+        return [sum_X / mark[maxIndex]  , sum_Y / mark[maxIndex]]
                         
                         
 
