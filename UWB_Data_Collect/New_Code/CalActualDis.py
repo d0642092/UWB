@@ -11,6 +11,7 @@ import math
 
 def calDis(timediff,speed,car,anchors,dir):
     move = speed * timediff
+    print(car)
     output = []
     for anchor in anchors.values():
         try :

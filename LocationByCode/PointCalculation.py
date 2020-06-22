@@ -3,7 +3,7 @@ import numpy as np
 import turtle as tl
 
 class pointCalculation():
-    def __init__(self,anchors_x,anchors_y,anchors_dis):
+    def __init__(self,anchors_x = None,anchors_y = None,anchors_dis = None):
         self.anchors_x = anchors_x
         self.anchors_y = anchors_y
         self.anchors_dis = anchors_dis
@@ -29,6 +29,8 @@ class pointCalculation():
     def get_group(self,anchor_numbers):
         ans = []
         tmp = []
+        if anchor_numbers < 3:
+            raise ValueError
         for i in range(anchor_numbers):
             for j in range(i+1,anchor_numbers):
                 for n in range(j+1,anchor_numbers):
@@ -38,6 +40,33 @@ class pointCalculation():
                     ans.append(tmp.copy())
                     tmp.clear()
         return ans
+    
+    def chech_Tri(self,a,b,c):
+        if a + b >= c and b + c >= a and a + c >= b:
+            return True
+        return False
+    
+    def fitTriangle(self,a,b,c):
+        outofRange = 30
+        if a + b < c:
+            off = c - a - b
+            if off > outofRange:
+                raise ValueError("offset is large,Bad Point",a,b,c)
+            c -= off / 2
+            b += off / 2
+        elif b + c < a:
+            off = a - b - c
+            if off > outofRange:
+                raise ValueError("offset is large,Bad Point",a,b,c)
+            b += off / 2
+            c += off / 2
+        elif a + c < b:
+            off = b - a - c
+            if off > outofRange:
+                raise ValueError("offset is large,Bad Point",a,b,c)
+            b -= off / 2
+            c += off / 2
+        return [a,b,c]
 
     def get_cal_array(self,anchor_groups):
         constList = []
@@ -54,6 +83,14 @@ class pointCalculation():
                 dis_between_start_end = self.get_anchor_dis(x_off,y_off)
                 dis_start = self.anchors_dis[startAnchor]
                 dis_end = self.anchors_dis[endAnchor]
+                if not self.chech_Tri(dis_between_start_end,dis_start,dis_end):
+                    try:
+                        newDis = self.fitTriangle(dis_between_start_end,dis_start,dis_end)
+                        dis_start = newDis[1]
+                        dis_end = newDis[2]
+                    except ValueError as e:
+                        print(repr(e))
+                        return None
                 cur_off = self.get_dis(dis_start,dis_between_start_end,dis_end)
                 proportion = round(cur_off / dis_between_start_end , 2)
                 cur_off_x = x_off * proportion
@@ -96,36 +133,46 @@ class pointCalculation():
             x = points[i][0]
             y = points[i][1]
             for j in range(len(points)):
+                if i == j:
+                    mark[i] += 1
+                    continue
                 test_x = points[j][0]
                 test_y = points[j][1]
                 if x + offset > test_x and test_x > x - offset and y + offset > test_y and test_y > y - offset:
-                    mark[j] += 1
+                    mark[i] += 1
+
         maxIndex = 0
         biggest = 0
         for i in range(len(mark)):
             if mark[i] > biggest:
                 biggest = mark[i]
                 maxIndex = i
+        if mark[maxIndex] == 1:
+            raise ValueError("Bad Points",points)
+        sameFlag = 1
+        value = mark[0]
+        for i in range(len(mark)):
+            if mark[i] != value:
+                sameFlag = 0
+        if sameFlag:
+            sum_X = 0
+            sum_Y = 0
+            for i in range(len(points)):
+                sum_X += points[i][0]
+                sum_Y += points[i][1]
+            return [ sum_X / len(points) , sum_Y / len(points) ]
+
         x = points[maxIndex][0]
         y = points[maxIndex][1]
-        max_X = points[maxIndex][0]
-        max_Y = points[maxIndex][1]
+        sum_X = 0
+        sum_Y = 0
         for j in range(len(points)):
             test_x = points[j][0]
             test_y = points[j][1]
             if x + offset > test_x and test_x > x - offset and y + offset > test_y and test_y > y - offset:
-                max_X += points[j][0]
-                max_Y += points[j][1]
-        if mark[maxIndex] == 0:
-            # max_X = 0
-            # max_Y = 0
-            # for i in range(len(points)):
-            #     max_X += points[i][0]
-            #     max_Y += points[i][1]
-            # return [ max_X / len(points) , max_Y / len(points) ]
-            raise ValueError("Bad Points",points)
-        mark[maxIndex] += 1
-        return [max_X / mark[maxIndex]  , max_Y / mark[maxIndex]]
+                sum_X += points[j][0]
+                sum_Y += points[j][1]
+        return [sum_X / mark[maxIndex]  , sum_Y / mark[maxIndex]]
                         
                         
 

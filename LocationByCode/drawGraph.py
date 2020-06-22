@@ -43,6 +43,8 @@ if __name__ == "__main__":
         pc.set_dis(i)
         #print(anchorGroups)
         points = pc.get_cal_array(anchorGroups)
+        if points is None:
+            continue
         try :
             finalPoints.append(pc.get_close_point(points))
         except ValueError as e:
