@@ -1,4 +1,4 @@
-import threading
+UWBimport threading
 import time
 
 #資料輸出
@@ -6,8 +6,8 @@ import pandas
 from openpyxl import Workbook, load_workbook
 
 # 拿取自己寫的檔案
-from UWB_Data_Collect.New_Code.CalActualDis import *
-from UWB_Data_Collect.New_Code.CatchData import AnchorName, Detail_Data, Catch_time
+from UWB.New_Code.CalActualDis import *
+from UWB.New_Code.CatchData import AnchorName, Detail_Data, Catch_time
 
 
 x = 546
