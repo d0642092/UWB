@@ -1,7 +1,2 @@
-# Project exclude paths
-/venv/
-.idea/
-LocationByCode/__pycache__
-UWB_Data_Collect/New_Code/__pycache__
-LocationByCode/.vscode
-UWB_Data_Collect/.idea
+doc/private/
+unusedFile
